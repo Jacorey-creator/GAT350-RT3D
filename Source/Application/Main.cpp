@@ -29,6 +29,7 @@ int main(int argc, char* argv[])
 		world->Update(ENGINE.GetTime().GetDeltaTime());
 
 		// draw
+		
 		world->Draw(*ENGINE.GetSystem<nc::Renderer>());
 	}
 
