@@ -24,7 +24,60 @@ namespace nc
             "void main() {"
             "  ocolor = vec4(color, 1);"
             "}";
+
+        GLuint vs = glCreateShader(GL_VERTEX_SHADER);
+        glShaderSource(vs, 1, &vertexShader, NULL);
+        glCompileShader(vs);
+
+        GLuint fs = glCreateShader(GL_FRAGMENT_SHADER);
+        glShaderSource(fs, 1, &fragmentShader, NULL);
+        glCompileShader(fs);
+
+        GLuint program = glCreateProgram();
+        glAttachShader(program,vs);
+        glAttachShader(program,fs);
+        glLinkProgram(program);
+
+        glUseProgram(program);
+
+        //vertex Data
+        float positionData[] = 
+        {
+        -0.8f, -0.8f, 0.0f,
+        0.0f, -0.8f, 0.0f,
+        0.0f,  0.8f, 0.0f
+        };
+
+        float colorData[] =
+        {
+            1.0f, 0.0f, 0.0f,
+            0.0f, 1.0f, 0.0f,
+            0.0f, 0.0f, 1.0f
+        };
+
+        GLuint vbo[2]; // Vertex Buffer Object
+        glGenBuffers(2, vbo);
+        glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(positionData), positionData, GL_STATIC_DRAW);
+
+        glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(colorData), colorData, GL_STATIC_DRAW);
+        
+        glGenVertexArrays(1, &m_vao);
+        glBindVertexArray(m_vao);
+
+        //position
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+        glBindVertexBuffer(0, vbo[0], 0, 3 * sizeof(GLfloat));
+
+        //color
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+        glBindVertexBuffer(1, vbo[1], 0, 3 * sizeof(GLfloat));
+
         //Triangle2
+
         const char* vertexShader2 =
             "#version 430\n"
             "layout (location=0) in vec3 position;"
@@ -45,28 +98,13 @@ namespace nc
             "  ocolor = vec4(color, 1);"
             "}";
 
-        GLuint vs = glCreateShader(GL_VERTEX_SHADER);
-        glShaderSource(vs, 1, &vertexShader, NULL);
-        glCompileShader(vs);
-
         GLuint vs2 = glCreateShader(GL_VERTEX_SHADER);
         glShaderSource(vs2, 1, &vertexShader2, NULL);
         glCompileShader(vs2);
 
-        GLuint fs = glCreateShader(GL_FRAGMENT_SHADER);
-        glShaderSource(fs, 1, &fragmentShader, NULL);
-        glCompileShader(fs);
-
         GLuint fs2 = glCreateShader(GL_FRAGMENT_SHADER);
         glShaderSource(fs2, 1, &fragmentShader2, NULL);
         glCompileShader(fs2);
-
-        GLuint program = glCreateProgram();
-        glAttachShader(program,vs);
-        glAttachShader(program,fs);
-        glLinkProgram(program);
-
-        glUseProgram(program);
 
         GLuint program2 = glCreateProgram();
         glAttachShader(program2, vs2);
@@ -74,31 +112,17 @@ namespace nc
         glLinkProgram(program2);
 
         glUseProgram(program2);
-        //vertex Data
-        float positionData[] = 
-        {
-        -0.8f, -0.8f, 0.0f,
-        0.0f, -0.8f, 0.0f,
-        0.0f,  0.8f, 0.0f
-        };
 
         //Triangle2
         float positionData2[] =
         {
-        0.8f, 0.8f, 0.0f,
+        0.9f, 0.8f, 0.0f,
         0.0f, 0.8f, 0.0f,
-        0.0f,  -0.8f, 0.0f
+        0.0f,  -0.8f, 0.9f
         };
         //--------
 
-        float colorData[] =
-        {
-            1.0f, 0.0f, 0.0f,
-            0.0f, 1.0f, 0.0f,
-            0.0f, 0.0f, 1.0f
-        };
-
-        //Triangle2
+ //Triangle2
         float colorData2[] =
         {
             1.0f, 1.0f, 0.0f,
@@ -107,20 +131,9 @@ namespace nc
         };
         //-------
 
-        GLuint vbo[2]; // Vertex Buffer Object
-        glGenBuffers(2, vbo);
-        glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(positionData), positionData, GL_STATIC_DRAW);
-
-        glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(colorData), colorData, GL_STATIC_DRAW);
-        
-        glGenVertexArrays(1, &m_vao);
-        glBindVertexArray(m_vao);
-
-        //---Triangle2
+//---Triangle2
         GLuint vbo2[2];
-        glGenBuffers(2, vbo2);  
+        glGenBuffers(2, vbo2);
         glBindBuffer(GL_ARRAY_BUFFER, vbo2[0]);
         glBufferData(GL_ARRAY_BUFFER, sizeof(positionData2), positionData2, GL_STATIC_DRAW);
 
@@ -131,27 +144,15 @@ namespace nc
         glBindVertexArray(m_vao2);
         //-----------
 
-        
-        //position
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-        glBindVertexBuffer(0, vbo[0], 0, 3 * sizeof(GLfloat));
-
-        //Triangle2
+//Triangle2
         glEnableVertexAttribArray(0);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
         glBindVertexBuffer(0, vbo2[0], 0, 3 * sizeof(GLfloat));
-
-        //color
-        glEnableVertexAttribArray(1);
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
-        glBindVertexBuffer(1, vbo[1], 0, 3 * sizeof(GLfloat));
 
         //Triangle2
         glEnableVertexAttribArray(1);
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
         glBindVertexBuffer(1, vbo2[1], 0, 3 * sizeof(GLfloat));
-
         return true;
     }
 
