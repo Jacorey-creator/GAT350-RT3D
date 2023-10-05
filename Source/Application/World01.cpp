@@ -38,11 +38,13 @@ namespace nc
         // render
         glPushMatrix();
         glTranslatef(m_position.x,m_position.y,0);
-        //TIME BASED TRANSFORMS
-        glRotatef(m_angle, 0, 1, 0);
+
+        //Auto TRANSFORMS
+        
+        //glRotatef(m_angle, 0, 1, 0);
         //glScalef((sin(m_time * 5) + 1) * 0.5f, 1, 1);
 
-        glBegin(GL_TRIANGLES); 
+        glBegin(GL_QUADS); 
 
         glColor3f(1, 0, 0);
         glVertex2f(-0.5f, -0.5f);
@@ -52,6 +54,9 @@ namespace nc
 
         glColor3f(0, 0, 1);
         glVertex2f(0.5f, -0.5f);
+
+        glColor3f(0, 0, 1);
+        glVertex2f(0.5f, 0.5f);
 
         glEnd();
         glPopMatrix();
